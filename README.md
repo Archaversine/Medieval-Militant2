@@ -1,5 +1,7 @@
 # Medieval Militant
 
+**GHC Version**: 9.10.1
+
 Compile the project with:
 
 ```bash 
