@@ -12,8 +12,8 @@ import Raylib.Util.Colors
 gameInit :: Game ()
 gameInit = pure ()
 
-gameLoop :: Game () 
-gameLoop = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
+gameFrame :: Game () 
+gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
 
 tick :: Game () 
 tick = pure ()
@@ -39,4 +39,4 @@ main = do
     
     -- game loop
     whileWindowOpen0 $ do 
-        runGame gameLoop w s
+        runGame gameFrame w s
