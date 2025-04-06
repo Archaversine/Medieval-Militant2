@@ -10,6 +10,7 @@ import Game.World
 import Linear
 
 import Raylib.Core
+import Raylib.Types.Core
 import Raylib.Util
 import Raylib.Util.Colors
 
@@ -37,6 +38,7 @@ main = do
         fps    = 60
     
     initWindowUnmanaged width height title
+    setWindowState [WindowResizable]
     setTargetFPS fps
 
     let s = GameState {windowWidth = width, windowHeight = height}
