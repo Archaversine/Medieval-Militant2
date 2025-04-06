@@ -10,6 +10,7 @@ import Raylib.Core.Textures
 
 import System.Directory
 import System.FilePath
+import System.IO.Unsafe
 
 pathToImageLoaderName :: FilePath -> String
 pathToImageLoaderName xs = "loadImage_" ++ filter f (takeBaseName xs)
@@ -22,13 +23,14 @@ pathToImageLoaderName xs = "loadImage_" ++ filter f (takeBaseName xs)
 -- This will generate the function `loadImage_sprite :: IO Image`
 makeImageLoader :: FilePath -> Q [Dec]
 makeImageLoader path = do 
-    funcBody <- [| loadTexture $(stringE path) |]
+    funcBody <- [| unsafePerformIO $ loadTexture $(stringE path) |]
     
     let funcName = mkName (pathToImageLoaderName path)
-        funcTy   = SigD funcName (AppT (ConT $ mkName "IO") (ConT $ mkName "Raylib.Types.Core.Textures.Texture"))
+        funcPrag = PragmaD (InlineP funcName NoInline FunLike AllPhases)
+        funcTy   = SigD funcName (ConT $ mkName "Raylib.Types.Core.Textures.Texture")
         funcDef  = FunD funcName [Clause [] (NormalB funcBody) []]
 
-    return [funcTy, funcDef]
+    return [funcPrag, funcTy, funcDef]
 
 -- | Given a directory, automatically call @makeImageLoader@ on all 
 -- files in that directory with the matching extension.
