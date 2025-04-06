@@ -3,6 +3,7 @@ module Main where
 import Apecs
 
 import Entity.Tower
+import Entity.Projectile
 
 import Game
 import Game.World
@@ -19,11 +20,14 @@ gameInit = do
     createDefaultTower (V2 30 30)
     createDefaultTower (V2 160 160)
 
+    createDefaultProjectile (V2 0 0) (V2 1 1)
+
 gameFrame :: Game () 
 gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
 
 tick :: Game () 
-tick = pure ()
+tick = do 
+    cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity
 
 render :: Game () 
 render = do 

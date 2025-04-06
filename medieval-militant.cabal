@@ -67,6 +67,7 @@ executable medieval-militant
                       Assets.Sprites.Towers
                       Assets.Sprites.Projectiles
                       Entity.Tower
+                      Entity.Projectile
                       Game
                       Game.World
 
