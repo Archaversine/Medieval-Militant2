@@ -20,7 +20,7 @@ gameInit = do
     createDefaultTower (V2 30 30)
     createDefaultTower (V2 160 160)
 
-    createDefaultProjectile (V2 0 0) (V2 1 1)
+    createDefaultProjectile (V2 0 0) (V2 2 1)
 
 gameFrame :: Game () 
 gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
@@ -32,7 +32,7 @@ tick = do
 render :: Game () 
 render = do 
     liftIO $ clearBackground darkGray
-    cmapM_ $ \(Pos p, Renderer f) -> liftIO (f p) -- render everything that has a position and a renderer
+    cmapM_ $ \(Pos p, Rot theta, Renderer f) -> liftIO (f p theta) -- render everything that has a position and a renderer
 
 main :: IO ()
 main = do 
