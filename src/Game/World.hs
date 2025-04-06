@@ -8,6 +8,7 @@ import Apecs
 import Linear
 
 newtype Pos = Pos (V2 Float)
+newtype Renderer = Renderer (V2 Float -> IO ())
 
-makeWorldAndComponents "World" [''Pos]
+makeWorldAndComponents "World" [''Pos, ''Renderer]
 

@@ -13,7 +13,7 @@ import System.FilePath
 import System.IO.Unsafe
 
 pathToImageLoaderName :: FilePath -> String
-pathToImageLoaderName xs = "loadImage_" ++ filter f (takeBaseName xs)
+pathToImageLoaderName xs = "image_" ++ filter f (takeBaseName xs)
     where f c = isAlphaNum c || c == '_'
 
 -- | Macro to generate a function to load a specified image

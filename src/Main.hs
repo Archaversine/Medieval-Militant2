@@ -1,16 +1,22 @@
 module Main where
 
-import Control.Monad.IO.Class
+import Apecs
+
+import Entity.Tower
 
 import Game
 import Game.World
+
+import Linear
 
 import Raylib.Core
 import Raylib.Util
 import Raylib.Util.Colors
 
 gameInit :: Game ()
-gameInit = pure ()
+gameInit = do 
+    createDefaultTower (V2 30 30)
+    createDefaultTower (V2 160 160)
 
 gameFrame :: Game () 
 gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
@@ -19,7 +25,9 @@ tick :: Game ()
 tick = pure ()
 
 render :: Game () 
-render = liftIO $ clearBackground black 
+render = do 
+    liftIO $ clearBackground darkGray
+    cmapM_ $ \(Pos p, Renderer f) -> liftIO (f p) -- render everything that has a position and a renderer
 
 main :: IO ()
 main = do 
