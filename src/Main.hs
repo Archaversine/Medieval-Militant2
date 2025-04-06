@@ -1,11 +1,25 @@
 module Main where
 
-import Assets.Sprites.Towers
+import Control.Monad.IO.Class
+
+import Game
+import Game.World
 
 import Raylib.Core
-import Raylib.Core.Textures
 import Raylib.Util
 import Raylib.Util.Colors
+
+gameInit :: Game ()
+gameInit = pure ()
+
+gameLoop :: Game () 
+gameLoop = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
+
+tick :: Game () 
+tick = pure ()
+
+render :: Game () 
+render = liftIO $ clearBackground black 
 
 main :: IO ()
 main = do 
@@ -17,11 +31,12 @@ main = do
     initWindowUnmanaged width height title
     setTargetFPS fps
 
-    tower <- loadImage_GrandTower -- automatically generated image loader
+    let s = GameState {windowWidth = width, windowHeight = height}
+
+    w <- initWorld
+
+    runGame gameInit w s
     
     -- game loop
     whileWindowOpen0 $ do 
-        beginDrawing
-        clearBackground black
-        drawTexture tower 30 30 white
-        endDrawing
+        runGame gameLoop w s

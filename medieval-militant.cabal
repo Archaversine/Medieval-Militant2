@@ -66,6 +66,8 @@ executable medieval-militant
                       Assets.Sprites.Units
                       Assets.Sprites.Towers
                       Assets.Sprites.Projectiles
+                      Game
+                      Game.World
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
