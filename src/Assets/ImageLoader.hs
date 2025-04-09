@@ -12,6 +12,9 @@ import System.Directory
 import System.FilePath
 import System.IO.Unsafe
 
+-- | Given a path to an asset file, return a valid identifier. 
+--
+-- For example: `pathToImageLoaderName "assets/sprite.png" = "image_sprite"`
 pathToImageLoaderName :: FilePath -> String
 pathToImageLoaderName xs = "image_" ++ filter f (takeBaseName xs)
     where f c = isAlphaNum c || c == '_'
