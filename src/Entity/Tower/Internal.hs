@@ -37,8 +37,8 @@ mkTowerRenderer img = Renderer $ \(V2 x y) rot -> do
 
 -- | Create a tower with the default renderer at a given position
 createTower :: Texture -> V2 Float -> Game ()
-createTower img pos = newEntity_ (Pos pos, Rot 0, mkTowerRenderer img)
+createTower img pos = newEntity_ (Pos pos, Rot 0, RenderG, mkTowerRenderer img)
 
 -- | Create a tower at a given position but with an @Animator@ instead of a @Renderer@
 createAnimatedTower :: Animator -> V2 Float -> Game () 
-createAnimatedTower animator pos = newEntity_ (Pos pos, Rot 0, animator)
+createAnimatedTower animator pos = newEntity_ (Pos pos, Rot 0, RenderG, animator)

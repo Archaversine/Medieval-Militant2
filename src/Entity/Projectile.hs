@@ -21,4 +21,4 @@ defaultProjectileRenderer pos rot = drawTextureEx image_Sprite_Projectiles_Arrow
 
 -- | Create a default projectile given position and velocity
 createDefaultProjectile :: V2 Float -> V2 Float -> Game ()
-createDefaultProjectile p dir = newEntity_ (Pos p, Vel dir, Rot (unangle dir * 180/pi + 90), Renderer defaultProjectileRenderer)
+createDefaultProjectile p dir = newEntity_ (Pos p, Vel dir, Rot (unangle dir * 180/pi + 90), RenderTop, Renderer defaultProjectileRenderer)

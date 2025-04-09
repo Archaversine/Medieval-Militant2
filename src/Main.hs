@@ -76,12 +76,6 @@ tick = do
         | next <= 0 -> return (Animator sheet (drop 1 frames) speed speed)
         | otherwise -> return (Animator sheet frames speed next)
 
--- | Utility function because apparently this doesn't exist in Prelude????
-headMaybe :: [a] -> Maybe a 
-headMaybe [] = Nothing
-headMaybe (x:_) = Just x 
-
--- FIXME: Fix Rendering order
 -- | Game Render Function
 --
 -- All rendering should go here.
@@ -90,17 +84,41 @@ headMaybe (x:_) = Just x
 render :: Game () 
 render = do 
     liftIO $ clearBackground darkGray
-    cmapM_ $ \(Pos p, Rot theta, Renderer f) -> liftIO (f p theta) -- render everything that has a position and a renderer
-    
-    -- render animated entities
-    cmapM_ $ \(Pos (V2 x y), Rot theta, Animator sheet frames _ _) -> case headMaybe frames of 
-        Nothing -> pure () -- Do nothing, out of frames to render
-        Just src -> do 
-            let width  = rectangle'width src
-                height = rectangle'height src
-                dest   = Rectangle x y width height
-        
-            liftIO $ drawTexturePro sheet src dest (V2 width height / 2) theta white
+    renderBG *> renderG *> renderTop -- render entities in order
+
+-- | Render all entities on the background
+--
+-- Renderers are rendered before Animators
+renderBG :: Game ()
+renderBG = do 
+    cmapM_ $ \(Pos p, Rot theta, RenderBG, Renderer f) -> liftIO (f p theta)
+    cmapM_ $ \(Pos p, Rot theta, RenderBG, a@(Animator {})) -> renderAnimator p theta a
+
+-- | Render all entities on the ground
+--
+-- Renderers are rendered before Animators
+renderG :: Game () 
+renderG = do 
+    cmapM_ $ \(Pos p, Rot theta, RenderG, Renderer f) -> liftIO (f p theta)
+    cmapM_ $ \(Pos p, Rot theta, RenderG, a@(Animator {})) -> renderAnimator p theta a
+
+-- | Render all entities above the ground
+--
+-- Renderers are rendered before Animators
+renderTop :: Game ()
+renderTop = do 
+    cmapM_ $ \(Pos p, Rot theta, RenderTop, Renderer f) -> liftIO (f p theta)
+    cmapM_ $ \(Pos p, Rot theta, RenderTop, a@(Animator {})) -> renderAnimator p theta a
+
+-- | Render an animated sprite
+renderAnimator :: V2 Float -> Float -> Animator -> Game ()
+renderAnimator _ _ (Animator _ [] _ _) = pure () -- Don't render when out of frames
+renderAnimator (V2 x y) theta (Animator sheet (src:_) _ _) = do 
+    let width  = rectangle'width src
+        height = rectangle'height src
+        dest   = Rectangle x y width height
+
+    liftIO $ drawTexturePro sheet src dest (V2 width height / 2) theta white
 
 main :: IO ()
 main = do 
