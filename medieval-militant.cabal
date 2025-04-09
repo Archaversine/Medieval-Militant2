@@ -67,6 +67,16 @@ executable medieval-militant
                       Assets.Sprites.Towers
                       Assets.Sprites.Projectiles
                       Entity.Tower
+                      Entity.Tower.Internal
+                      Entity.Tower.Acceleration
+                      Entity.Tower.Attractor 
+                      Entity.Tower.Fire
+                      Entity.Tower.Lightning
+                      Entity.Tower.Poison
+                      Entity.Tower.Sniper
+                      Entity.Tower.Standard
+                      Entity.Tower.Support
+                      Entity.Tower.Temporal
                       Entity.Projectile
                       Game
                       Game.World

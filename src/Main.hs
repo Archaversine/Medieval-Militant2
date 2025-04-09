@@ -2,6 +2,8 @@ module Main where
 
 import Apecs
 
+import Control.Monad
+
 import Entity.Tower
 import Entity.Projectile
 
@@ -21,8 +23,24 @@ import Raylib.Util.Colors
 -- This is useful for initializing data
 gameInit :: Game ()
 gameInit = do 
-    createDefaultTower (V2 30 30)
-    createDefaultTower (V2 160 160)
+    let towers = [ createAcceleration 
+                 , createAttractor    
+                 , createFire         
+                 , createLightning    
+                 , createPoison       
+                 , createSniper       
+                 , createStandard     
+                 , createSupport      
+                 , createTemporal     
+                 ]
+
+    -- Coordinates to place towers at
+    let xs     = [30, 30 + 130 .. 650]
+        ys     = [30, 30 + 130 .. 450]
+        coords = [V2 x y | x <- xs, y <- ys]
+
+    -- spawn all towers with automatic spacing
+    zipWithM_ id towers coords
 
     createDefaultProjectile (V2 0 0) (V2 2 1)
 
