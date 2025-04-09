@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Assets.ImageLoader where
+module Assets.ImageLoader (makeImageLoader, makeImageLoaders) where
 
 import Data.Char
 
