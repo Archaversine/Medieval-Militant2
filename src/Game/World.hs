@@ -16,6 +16,8 @@ newtype Vel = Vel (V2 Float)
 newtype Rot = Rot Float -- rotation (degrees because apparently nobody understand radians)
 newtype Renderer = Renderer (V2 Float -> Float -> IO ())
 
+-- NOTE: If your entity needs to be rendered, it MUST have one of these, 
+-- otherwise it will not be rendered
 data RenderBG  = RenderBG  -- for entities to be rendered on the background (e.g. grass)
 data RenderG   = RenderG   -- for entities to be rendered on the ground (e.g. units, towers, etc.)
 data RenderTop = RenderTop -- for entities to be rendered above the ground (e.g. projectiles)
