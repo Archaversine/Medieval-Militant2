@@ -7,6 +7,8 @@ import Apecs
 
 import Linear
 
+import Raylib.Types
+
 -- List of components an entity can have
 -- NOTE: An entity does not have to have any of these components
 newtype Pos = Pos (V2 Float)
@@ -14,8 +16,22 @@ newtype Vel = Vel (V2 Float)
 newtype Rot = Rot Float -- rotation (degrees because apparently nobody understand radians)
 newtype Renderer = Renderer (V2 Float -> Float -> IO ())
 
+-- | Allows entities to have animations instead of a single still image (via @Renderer@)
+--
+-- NOTE: Do not use with @Renderer@
+data Animator = Animator { 
+    animSheet  :: !Texture,     -- ^ The Sprite sheet
+    animFrames :: ![Rectangle], -- ^ This should be an infinite list (use @cycle@ to easily create one)
+    animSpeed  :: !Float,       -- ^ In seconds
+    animNext   :: !Float        -- ^ Time till next frame (in seconds). You probably don't want to touch this
+}
+
+-- | Create a new animator and automatically set @animNext@
+newAnimator :: Texture -> [Rectangle] -> Float -> Animator
+newAnimator sheet frames speed = Animator sheet frames speed speed
+
 -- Automatically generates the world type
 -- The exact implementation isn't relevant, it's essentially 
 -- a list of references to maps that map entity IDs to their corresponding components
-makeWorldAndComponents "World" [''Pos, ''Vel, ''Rot, ''Renderer]
+makeWorldAndComponents "World" [''Pos, ''Vel, ''Rot, ''Renderer, ''Animator]
 

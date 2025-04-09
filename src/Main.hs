@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiWayIf #-}
+
 module Main where
 
 import Apecs
@@ -13,6 +15,7 @@ import Game.World
 import Linear
 
 import Raylib.Core
+import Raylib.Core.Textures
 import Raylib.Types.Core
 import Raylib.Util
 import Raylib.Util.Colors
@@ -35,8 +38,8 @@ gameInit = do
                  ]
 
     -- Coordinates to place towers at
-    let xs     = [30, 30 + 130 .. 650]
-        ys     = [30, 30 + 130 .. 450]
+    let xs     = [130, 130 + 130 .. 650]
+        ys     = [130, 130 + 130 .. 450]
         coords = [V2 x y | x <- xs, y <- ys]
 
     -- spawn all towers with automatic spacing
@@ -62,6 +65,23 @@ tick :: Game ()
 tick = do 
     cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity
 
+    -- Update Animators:
+    -- Updates @animNext@ by delta time
+    cmapM $ \(Animator sheet frames speed next) -> do 
+        delta <- liftIO getFrameTime
+        return (Animator sheet frames speed (next - delta))
+
+    -- Update animation frame and reset @animNext@ if less than 0
+    cmapM $ \(Animator sheet frames speed next) -> if
+        | next <= 0 -> return (Animator sheet (drop 1 frames) speed speed)
+        | otherwise -> return (Animator sheet frames speed next)
+
+-- | Utility function because apparently this doesn't exist in Prelude????
+headMaybe :: [a] -> Maybe a 
+headMaybe [] = Nothing
+headMaybe (x:_) = Just x 
+
+-- FIXME: Fix Rendering order
 -- | Game Render Function
 --
 -- All rendering should go here.
@@ -71,6 +91,16 @@ render :: Game ()
 render = do 
     liftIO $ clearBackground darkGray
     cmapM_ $ \(Pos p, Rot theta, Renderer f) -> liftIO (f p theta) -- render everything that has a position and a renderer
+    
+    -- render animated entities
+    cmapM_ $ \(Pos (V2 x y), Rot theta, Animator sheet frames _ _) -> case headMaybe frames of 
+        Nothing -> pure () -- Do nothing, out of frames to render
+        Just src -> do 
+            let width  = rectangle'width src
+                height = rectangle'height src
+                dest   = Rectangle x y width height
+        
+            liftIO $ drawTexturePro sheet src dest (V2 width height / 2) theta white
 
 main :: IO ()
 main = do 
