@@ -78,8 +78,13 @@ executable medieval-militant
                       Entity.Tower.Support
                       Entity.Tower.Temporal
                       Entity.Projectile
+                      Entity.Projectile.Internal
+                      Entity.Projectile.Arrow
+                      Entity.Projectile.Fire
+                      Entity.Projectile.Poison
                       Game
                       Game.World
+                      Utils.Rendering
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:

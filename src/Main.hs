@@ -28,9 +28,9 @@ gameInit :: Game ()
 gameInit = do 
     let towers = [ createAcceleration 
                  , createAttractor    
-                 , createFire         
+                 , createFireTower
                  , createLightning    
-                 , createPoison       
+                 , createPoisonTower       
                  , createSniper       
                  , createStandard     
                  , createSupport      
@@ -45,7 +45,9 @@ gameInit = do
     -- spawn all towers with automatic spacing
     zipWithM_ id towers coords
 
-    createDefaultProjectile (V2 0 0) (V2 2 1)
+    createArrow      (V2 0 30) (V2 2 0)
+    createFireProj   (V2 0 60) (V2 2 0)
+    createPoisonProj (V2 0 90) (V2 2 0)
 
 -- | Game Frame Function
 -- 
@@ -63,7 +65,7 @@ gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
 -- Such as: updating position, health, etc.
 tick :: Game () 
 tick = do 
-    cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity
+    cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity (assumes already normalized)
 
     -- Update Animators:
     -- Updates @animNext@ by delta time
