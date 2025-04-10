@@ -15,6 +15,7 @@ newtype Pos = Pos (V2 Float)
 newtype Vel = Vel (V2 Float)
 newtype Rot = Rot Float -- rotation (degrees because apparently nobody understand radians)
 newtype Renderer = Renderer (V2 Float -> Float -> IO ())
+newtype Lifetime = Lifetime Float -- Time an entity should live for (in seconds)
 
 -- NOTE: If your entity needs to be rendered, it MUST have one of these, 
 -- otherwise it will not be rendered
@@ -51,5 +52,6 @@ makeWorldAndComponents "World" [ ''Pos
                                , ''RenderBG 
                                , ''RenderG 
                                , ''RenderTop
+                               , ''Lifetime
                                ]
 
