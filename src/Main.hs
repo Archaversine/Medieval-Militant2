@@ -65,12 +65,13 @@ gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
 -- Such as: updating position, health, etc.
 tick :: Game () 
 tick = do 
+    delta <- liftIO getFrameTime
+    
     cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity (assumes already normalized)
 
     -- Update Animators:
     -- Updates @animNext@ by delta time
     cmapM $ \(Animator sheet frames speed next) -> do 
-        delta <- liftIO getFrameTime
         return (Animator sheet frames speed (next - delta))
 
     -- Update animation frame and reset @animNext@ if less than 0
