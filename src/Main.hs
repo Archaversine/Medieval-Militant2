@@ -65,7 +65,7 @@ gameFrame = tick *> liftIO beginDrawing *> render *> liftIO endDrawing
 -- Such as: updating position, health, etc.
 tick :: Game () 
 tick = do 
-    delta <- liftIO getFrameTime
+    delta <- liftIO getFrameTime -- Delta time (in seconds)
     
     cmap $ \(Pos p, Vel dir) -> Pos (p + dir) -- Position is updated by velocity (assumes already normalized)
 
@@ -78,6 +78,9 @@ tick = do
     cmapM $ \(Animator sheet frames speed next) -> if
         | next <= 0 -> return (Animator sheet (drop 1 frames) speed speed)
         | otherwise -> return (Animator sheet frames speed next)
+
+    -- Update entities with a lifetime
+    cmap $ \(Lifetime t) -> Lifetime (t - delta)
 
 -- | Game Render Function
 --
