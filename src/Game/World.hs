@@ -18,6 +18,10 @@ newtype Renderer = Renderer (V2 Float -> Float -> IO ())
 
 -- NOTE: If your entity needs to be rendered, it MUST have one of these, 
 -- otherwise it will not be rendered
+--
+-- If an entity as more than one of these, then it will be rendered multiple times
+--
+-- TODO: Represent this as an ADT to prevent entities from having multiple render layers
 data RenderBG  = RenderBG  -- for entities to be rendered on the background (e.g. grass)
 data RenderG   = RenderG   -- for entities to be rendered on the ground (e.g. units, towers, etc.)
 data RenderTop = RenderTop -- for entities to be rendered above the ground (e.g. projectiles)
