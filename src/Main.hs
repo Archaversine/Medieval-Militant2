@@ -8,6 +8,7 @@ import Control.Monad
 
 import Entity.Tower
 import Entity.Projectile
+import Entity.Unit
 
 import Game
 import Game.World
@@ -44,6 +45,23 @@ gameInit = do
 
     -- spawn all towers with automatic spacing
     zipWithM_ id towers coords
+
+    let units = [ createUnitKnight
+                , createUnitMagicKnight
+                , createUnitMagicSupport
+                , createUnitDemoman
+                , createUnitHeavyHammer
+                , createUnitSniper
+                , createUnitSupport
+                ]
+
+    createUnitKnight       (V2 520 130) (V2 0 0)
+    createUnitMagicKnight  (V2 520 260) (V2 1 1)
+    createUnitMagicSupport (V2 520 390) (V2 1 (-1))
+    createUnitDemoman      (V2 650 130) (V2 (-1) (-1))
+    createUnitHeavyHammer  (V2 650 260) (V2 (-1) 1)
+    createUnitSniper       (V2 650 390) (V2 0 0)
+    createUnitSupport      (V2 780 130) (V2 0 0)
 
     createArrow      (V2 0 30) (V2 2 0)
     createFireProj   (V2 0 60) (V2 2 0)

@@ -82,6 +82,15 @@ executable medieval-militant
                       Entity.Projectile.Arrow
                       Entity.Projectile.Fire
                       Entity.Projectile.Poison
+                      Entity.Unit
+                      Entity.Unit.Internal
+                      Entity.Unit.Knight
+                      Entity.Unit.MagicKnight
+                      Entity.Unit.Demoman
+                      Entity.Unit.HeavyHammer
+                      Entity.Unit.MagicSupport
+                      Entity.Unit.Sniper
+                      Entity.Unit.Support
                       Game
                       Game.World
                       Utils.Rendering
